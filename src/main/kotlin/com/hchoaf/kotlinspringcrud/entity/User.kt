@@ -7,9 +7,23 @@ import jakarta.persistence.Id
 class User {
 
     @Id
-    val id: Long = TODO("initialize me")
+    val id: Long = 0L
 
-    var name: String
+    var name: String? = null
 
-    var age: Int
+    @JvmName("getId1")
+    fun getId() : Long {
+        return id
+    }
+
+    @JvmName("setName1")
+    fun setName(name: String) {
+        this.name = name
+    }
+
+    @JvmName("getName1")
+    fun getName() : String? {
+        return name
+    }
+
 }
