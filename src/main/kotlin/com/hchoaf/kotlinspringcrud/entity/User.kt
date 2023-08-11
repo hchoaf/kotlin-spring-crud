@@ -7,10 +7,14 @@ import jakarta.persistence.Id
 class User {
 
     @Id
-    val id: Long = 0L
+    private var id: Long = 0L
 
     var name: String? = null
 
+    @JvmName("setId1")
+    fun setId(id : Long) {
+        this.id = id
+    }
     @JvmName("getId1")
     fun getId() : Long {
         return id

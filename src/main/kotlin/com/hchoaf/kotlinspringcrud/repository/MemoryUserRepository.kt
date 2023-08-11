@@ -1,16 +1,20 @@
 package com.hchoaf.kotlinspringcrud.repository
 
 import com.hchoaf.kotlinspringcrud.entity.User
-
+import org.springframework.stereotype.Repository
+import java.lang.IllegalArgumentException
+@Repository
 class MemoryUserRepository : UserRepository {
     private val users : MutableMap<Long, User> = mutableMapOf()
+    private var idSequence : Long = 0L;
 
     override fun save(user: User) {
-        if(!users.containsKey(user.id)) {
-            users[user.id] = user
+        user.setId(idSequence++)
+        if(!users.containsKey(user.getId())) {
+            users[user.getId()] = user
+        } else {
+            throw IllegalArgumentException("User already exists!")
         }
-
-        TODO("Not yet implemented")
     }
 
     override fun findById(id: Long): User? {
