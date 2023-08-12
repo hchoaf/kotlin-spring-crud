@@ -9,24 +9,50 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class UserController (val userService: UserService){
     @GetMapping("/user")
-    fun getUser(@RequestParam("id") id: Long ) : ResponseEntity<String> {
-        val user = userService.getUserById(id)
+    fun getUserById(@RequestParam("id") id: Long ) : ResponseEntity<String> {
+        val user : User?
+        return try {
+            user = userService.findUserById(id)
+            returnUserResponseEntity(user!!)
+        } catch (e : Exception) {
+            returnUserNotFoundResponseEntity()
+        }
+    }
+    /*
+    @GetMapping("/user")
+    fun getUserByUsername(@RequestParam("username") username: String ) : ResponseEntity<String> {
+        val user = userService.findUserByUsername(username)
         return if (user == null) {
-            ResponseEntity<String>("User not found", HttpStatusCode.valueOf(404))
-        } else {
-            ResponseEntity<String>("User Id : ${user.getId()} | User Name : ${user.name}", HttpStatusCode.valueOf(200))
+            returnUserNotFoundResponseEntity()
+        }else {
+            returnUserResponseEntity(user)
         }
     }
 
+     */
+
     @PostMapping("/user/new")
-    fun addUser(@RequestBody name : String) : ResponseEntity<String> {
-        val user = User()
-        user.setName(name)
+    fun addUser(@RequestParam username : String, @RequestParam nickname: String, @RequestParam password: String) : ResponseEntity<String> {
+        val user = User(username, password, nickname)
         return try {
-            userService.addUser(user)
-            ResponseEntity<String>("User Id : ${user.getId()} | User Name : ${user.name} \n Successfully Added!", HttpStatusCode.valueOf(200))
+            userService.register(user)
+            return returnUserResponseEntity(user)
         } catch (e: Exception) {
             ResponseEntity<String>("User already exists!", HttpStatusCode.valueOf(404))
         }
+    }
+
+    fun returnUserResponseEntity(user : User) : ResponseEntity<String> {
+        return ResponseEntity<String>(
+            "Id : ${user.getId()} | Username : ${user.username} | Password : ${user.password} | Nickname : ${user.nickname}",
+            HttpStatusCode.valueOf(200)
+        )
+    }
+
+    fun returnUserNotFoundResponseEntity() : ResponseEntity<String> {
+        return ResponseEntity<String>(
+            "User not found",
+            HttpStatusCode.valueOf(404)
+        )
     }
 }

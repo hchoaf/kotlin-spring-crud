@@ -6,21 +6,33 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(val userRepository: UserRepository) {
-    fun addUser(user: User) : Long {
-        userRepository.save(user)
-        return user.getId()
+
+    fun register(user : User): User {
+        return userRepository.save(user)
     }
 
-    fun getUserById(id: Long) : User? {
-        return userRepository.findById(id)
+
+
+    fun findUserById(id : Long) : User? {
+        return userRepository.getReferenceById(id)
     }
 
-    fun getUserByName(name: String) : List<User>? {
-        return userRepository.findByName(name)
+    fun findUserByUsername(username : String) : User? {
+        return userRepository.findByUsername(username)
     }
-    fun isUserDuplicate(user: User) : Boolean {
-        return (userRepository.findById(user.getId()) == null)
+
+    fun findUserByNickname(nickname: String) : User? {
+        return userRepository.findByNickname(nickname)
     }
+
+    fun isUsernameDupliate(username: String) : Boolean {
+        return (userRepository.findByUsername(username) != null)
+    }
+
+    fun isNicknameDuplicate(nickname: String) : Boolean {
+        return (userRepository.findByNickname(nickname) != null)
+    }
+
 
 
 }

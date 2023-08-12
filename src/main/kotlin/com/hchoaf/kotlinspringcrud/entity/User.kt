@@ -1,33 +1,35 @@
 package com.hchoaf.kotlinspringcrud.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity
-class User {
+@Table(name="User-Database")
+open class User() {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Long = 0L
 
-    var name: String? = null
-
-    @JvmName("setId1")
-    fun setId(id : Long) {
-        this.id = id
+    constructor(username: String, password: String, nickname: String) : this() {
+        this.username = username
+        this.password = password
+        this.nickname = nickname
     }
-    @JvmName("getId1")
+
+    var username : String? = null
+        protected set
+
+    var password: String? = null
+        protected set
+
+    var nickname: String? = null
+        protected set
+
     fun getId() : Long {
-        return id
+        return this.id
     }
-
-    @JvmName("setName1")
-    fun setName(name: String) {
-        this.name = name
-    }
-
-    @JvmName("getName1")
-    fun getName() : String? {
-        return name
+    override fun toString() : String {
+        return "$id | $username | $password | $nickname";
     }
 
 }

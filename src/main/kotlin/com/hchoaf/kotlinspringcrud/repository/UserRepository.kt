@@ -1,13 +1,11 @@
 package com.hchoaf.kotlinspringcrud.repository
 
 import com.hchoaf.kotlinspringcrud.entity.User
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface UserRepository {
-    fun save(user: User)
+interface UserRepository : JpaRepository<User, Long>{
+    fun findByUsername(username : String) : User?
 
-    fun findById(id: Long) : User?
+    fun findByNickname(nickName : String) : User?
 
-    fun findByName(name: String) : List<User>?
-
-    fun findAll() : List<User>?
 }
