@@ -12,30 +12,17 @@ class UserController (val userService: UserService){
     fun getUserById(@RequestParam("id") id: Long ) : ResponseEntity<String> {
         val user : User?
         return try {
-            user = userService.findUserById(id)
+            user = userService.getUser(id)
             returnUserResponseEntity(user!!)
         } catch (e : Exception) {
             returnUserNotFoundResponseEntity()
         }
     }
-    /*
-    @GetMapping("/user")
-    fun getUserByUsername(@RequestParam("username") username: String ) : ResponseEntity<String> {
-        val user = userService.findUserByUsername(username)
-        return if (user == null) {
-            returnUserNotFoundResponseEntity()
-        }else {
-            returnUserResponseEntity(user)
-        }
-    }
-
-     */
 
     @PostMapping("/user/new")
-    fun addUser(@RequestParam username : String, @RequestParam nickname: String, @RequestParam password: String) : ResponseEntity<String> {
-        val user = User(username, password, nickname)
+    fun addUser(@RequestParam username : String, @RequestParam password: String) : ResponseEntity<String> {
         return try {
-            userService.register(user)
+            val user = userService.register(username, password)
             return returnUserResponseEntity(user)
         } catch (e: Exception) {
             ResponseEntity<String>("User already exists!", HttpStatusCode.valueOf(404))
@@ -44,7 +31,7 @@ class UserController (val userService: UserService){
 
     fun returnUserResponseEntity(user : User) : ResponseEntity<String> {
         return ResponseEntity<String>(
-            "Id : ${user.getId()} | Username : ${user.username} | Password : ${user.password} | Nickname : ${user.nickname}",
+            "Id : ${user.getId()} | Username : ${user.username} | Password : ${user.password}",
             HttpStatusCode.valueOf(200)
         )
     }

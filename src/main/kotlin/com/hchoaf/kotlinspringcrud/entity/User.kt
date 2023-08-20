@@ -10,10 +10,9 @@ open class User() {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Long = 0L
 
-    constructor(username: String, password: String, nickname: String) : this() {
+    constructor(username: String, password: String) : this() {
         this.username = username
         this.password = password
-        this.nickname = nickname
     }
 
     var username : String? = null
@@ -22,14 +21,11 @@ open class User() {
     var password: String? = null
         protected set
 
-    var nickname: String? = null
-        protected set
-
     fun getId() : Long {
         return this.id
     }
     override fun toString() : String {
-        return "$id | $username | $password | $nickname";
+        return "$id | $username | $password";
     }
 
 }
